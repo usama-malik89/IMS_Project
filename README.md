@@ -1,7 +1,11 @@
 Coverage: 34%
-# Project Title
+# Inventory Management System Project
 
-One Paragraph of project description goes here
+The goal of this project is to create an Inventory Management System (IMS) using:
+* Java
+* Maven
+* JUnit
+* MySQL
 
 ## Getting Started
 

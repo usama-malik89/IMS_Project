@@ -1,4 +1,4 @@
-Coverage: 34%
+Coverage: 36%
 # Inventory Management System Project
 
 The goal of this project is to create an Inventory Management System (IMS) using:

@@ -19,12 +19,19 @@ public class DBUtils {
 
 	private final String DB_PASS;
 
-	private final String DB_URL = "jdbc:mysql://localhost:3306/ims";
+	private final String DB_URL;
 
 	private DBUtils(String username, String password) {
 		this.DB_USER = username;
 		this.DB_PASS = password;
-
+		this.DB_URL = "jdbc:mysql://localhost:3306/ims";
+		init();
+	}
+	
+	private DBUtils(String username, String password, String db) {
+		this.DB_USER = username;
+		this.DB_PASS = password;
+		this.DB_URL = "jdbc:mysql://localhost:3306/" + db;
 		init();
 	}
 
@@ -72,12 +79,22 @@ public class DBUtils {
 		instance = new DBUtils(username, password);
 		return instance;
 	}
+	
+	public static DBUtils connect(String username, String password, String db) {
+		instance = new DBUtils(username, password, db);
+		return instance;
+	}
 
 	public static DBUtils getInstance() {
 		if (instance == null) {
 			instance = new DBUtils("", "");
 		}
 		return instance;
+	}
+	
+	public static boolean authenticate() {
+		
+		return false;
 	}
 
 }

@@ -48,5 +48,23 @@ public class Utils {
 		} while (doubleInput == null);
 		return doubleInput;
 	}
+	
+	public Long getOrderItemAction() {
+		Long longInput = null;
+		do {
+			String input = getString();
+			if(input.equals("q")) {
+				break;
+			}
+			else {
+				try {
+					longInput = Long.parseLong(input);
+				} catch (Exception e) {
+					LOGGER.info("Error - Please enter a number");
+				}
+			}
+		} while (longInput == null);
+		return longInput;
+	}
 
 }

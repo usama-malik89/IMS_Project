@@ -130,5 +130,20 @@ public class OrderDAO implements Dao<Order> {
 		}
 		return 0;
 	}
+	
+	public Order createOrderItems(long orderID, long itemID) {
+		try (Connection connection = DBUtils.getInstance().getConnection();
+				Statement statement = connection.createStatement();) {
+			statement.executeUpdate("INSERT INTO order_items(order_id, item_id) values('" + orderID +"','" + itemID +"')");
+			return readLatest();
+		} catch (SQLIntegrityConstraintViolationException e) {
+			LOGGER.debug(e);
+			LOGGER.error("This customer ID or item ID does not exist!");
+		} catch (Exception e) {
+			LOGGER.debug(e);
+			LOGGER.error(e.getMessage());
+		}
+		return null;
+	}
 
 }

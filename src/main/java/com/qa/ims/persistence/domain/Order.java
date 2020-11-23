@@ -1,9 +1,12 @@
 package com.qa.ims.persistence.domain;
 
+import java.util.ArrayList;
+
 public class Order {
 
 	private Long id;
 	private Long customer_id;
+	private ArrayList<Item> items;
 
 
 	public Order(Long customer_id) {
@@ -11,9 +14,16 @@ public class Order {
 	}
 		
 
+	public Order(Long id, Long customer_id, ArrayList<Item> items) {
+		this.id = id;
+		this.customer_id = customer_id;
+		this.items = items;
+	}
+	
 	public Order(Long id, Long customer_id) {
 		this.id = id;
 		this.customer_id = customer_id;
+		this.items = items;
 	}
 
 	public Long getId() {

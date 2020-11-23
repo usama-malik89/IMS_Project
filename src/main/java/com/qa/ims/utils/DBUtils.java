@@ -91,10 +91,5 @@ public class DBUtils {
 		}
 		return instance;
 	}
-	
-	public static boolean authenticate() {
-		
-		return false;
-	}
 
 }

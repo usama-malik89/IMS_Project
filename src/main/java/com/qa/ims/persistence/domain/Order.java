@@ -2,6 +2,10 @@ package com.qa.ims.persistence.domain;
 
 import java.util.ArrayList;
 
+import org.apache.logging.log4j.core.tools.picocli.CommandLine;
+
+import com.qa.ims.utils.CommandLineTable;
+
 public class Order {
 
 	private Long id;
@@ -12,7 +16,6 @@ public class Order {
 	public Order(Long customer_id) {
 		this.customer_id = customer_id;
 	}
-		
 
 	public Order(Long id, Long customer_id, ArrayList<Item> items) {
 		this.id = id;
@@ -23,7 +26,6 @@ public class Order {
 	public Order(Long id, Long customer_id) {
 		this.id = id;
 		this.customer_id = customer_id;
-		this.items = items;
 	}
 
 	public Long getId() {
@@ -42,17 +44,25 @@ public class Order {
 		this.customer_id = customer_id;
 	}
 
-//	public String getSurname() {
-//		return surname;
-//	}
-//
-//	public void setSurname(String surname) {
-//		this.surname = surname;
-//	}
+	public ArrayList<Item> getItems(){
+		return items;
+	}
+	
+	public void setItems(ArrayList<Item> items){
+		this.items = items;
+	}
 
 	@Override
 	public String toString() {
-		return "id:" + id + " customer id:" + customer_id;
+		String result = "order_id:" + id + " customer_id:" + customer_id;
+		return result;
+	}
+	
+	public CommandLineTable toRow(CommandLineTable clt) {
+		for(Item item : items) {
+			clt.addRow(Long.toString(item.getId()), item.getName(), Double.toString(item.getValue()));
+		}
+		return clt;
 	}
 
 	@Override

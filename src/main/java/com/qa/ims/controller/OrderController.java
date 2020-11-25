@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.qa.ims.persistence.dao.OrderDAO;
 import com.qa.ims.persistence.domain.Order;
+import com.qa.ims.utils.CommandLineTable;
 import com.qa.ims.utils.Utils;
 
 /**
@@ -31,10 +32,17 @@ public class OrderController implements CrudController<Order> {
 	 */
 	@Override
 	public List<Order> readAll() {
+		
 		List<Order> orders = orderDAO.readAll();
 		for (Order order : orders) {
 			LOGGER.info(order.toString());
+			CommandLineTable clt = new CommandLineTable();
+			clt.setHeaders("ID", "NAME", "VALUE");
+			order.toRow(clt);
+			clt.print();
+			LOGGER.info(" ");
 		}
+		
 		return orders;
 	}
 
@@ -62,7 +70,7 @@ public class OrderController implements CrudController<Order> {
 			if(item_id == null) {
 				fin = true;
 			}else {
-				orderDAO.createOrderItems(order.getId(), item_id);
+				orderDAO.createOrderItems(order, item_id);
 			}
 			
 		} while(!fin);
@@ -76,11 +84,31 @@ public class OrderController implements CrudController<Order> {
 	 */
 	@Override
 	public Order update() {
-		LOGGER.info("Please enter the id of the order you would like to update");
-		Long id = utils.getLong();
-		LOGGER.info("Please enter a customer id");
-		Long customer_id = utils.getLong();
-		Order order = orderDAO.update(new Order(id, customer_id));
+		boolean validOrderID = false;
+		Long id;
+		Order order;
+		do {
+			LOGGER.info("Please enter the id of the order you would like to update");
+			id = utils.getLong();
+			
+			Order checkOrder = orderDAO.readOrder(id);
+			if(checkOrder != null){
+				validOrderID = true;
+			}else {
+				LOGGER.info("This order id does not exist!");
+			}
+		}while(!validOrderID);
+		
+		boolean validCustomerID = false;
+		do {
+			LOGGER.info("Please enter the new customer id");
+			Long customer_id = utils.getLong();
+			order = orderDAO.update(new Order(id, customer_id));
+			if(order != null){
+				validCustomerID = true;
+			}
+		}while(!validCustomerID);
+		
 		LOGGER.info("Order Updated");
 		return order;
 	}

@@ -11,6 +11,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.qa.ims.persistence.domain.Item;
 import com.qa.ims.persistence.domain.Order;
 import com.qa.ims.utils.DBUtils;
 
@@ -22,7 +23,15 @@ public class OrderDAO implements Dao<Order> {
 	public Order modelFromResultSet(ResultSet resultSet) throws SQLException {
 		Long id = resultSet.getLong("id");
 		Long customer_id = resultSet.getLong("customer_id");
-		return new Order(id, customer_id);
+		ArrayList<Item> items = getItems(id);
+		return new Order(id, customer_id, items);
+	}
+	
+	public Item modelFromResultSetItem(ResultSet resultSet) throws SQLException {
+		Long id = resultSet.getLong("id");
+		String name = resultSet.getString("name");
+		Double value = resultSet.getDouble("value");
+		return new Item(id, name, value);
 	}
 
 	/**
@@ -85,8 +94,10 @@ public class OrderDAO implements Dao<Order> {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery("SELECT * FROM orders where id = " + id);) {
-			resultSet.next();
-			return modelFromResultSet(resultSet);
+			//LOGGER.info(resultSet.next());
+			if(resultSet.next()) {
+				return modelFromResultSet(resultSet);
+			}
 		} catch (Exception e) {
 			LOGGER.debug(e);
 			LOGGER.error(e.getMessage());
@@ -107,6 +118,9 @@ public class OrderDAO implements Dao<Order> {
 				Statement statement = connection.createStatement();) {
 			statement.executeUpdate("update orders set customer_id ='" + order.getCustomerId() + "' where id =" + order.getId());
 			return readOrder(order.getId());
+		} catch (SQLIntegrityConstraintViolationException e) {
+			LOGGER.debug(e);
+			LOGGER.error("This customer ID does not exist!");
 		} catch (Exception e) {
 			LOGGER.debug(e);
 			LOGGER.error(e.getMessage());
@@ -131,10 +145,10 @@ public class OrderDAO implements Dao<Order> {
 		return 0;
 	}
 	
-	public Order createOrderItems(long orderID, long itemID) {
+	public Order createOrderItems(Order order, long itemID) {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				Statement statement = connection.createStatement();) {
-			statement.executeUpdate("INSERT INTO order_items(order_id, item_id) values('" + orderID +"','" + itemID +"')");
+			statement.executeUpdate("INSERT INTO order_items(order_id, item_id) values('" + order.getId() +"','" + itemID +"')");
 			return readLatest();
 		} catch (SQLIntegrityConstraintViolationException e) {
 			LOGGER.debug(e);
@@ -145,5 +159,27 @@ public class OrderDAO implements Dao<Order> {
 		}
 		return null;
 	}
-
+	
+	public ArrayList<Item> getItems(Long id) {
+		try (Connection connection = DBUtils.getInstance().getConnection();
+				Statement statement = connection.createStatement();
+				ResultSet resultSet = statement.executeQuery(""
+						+ "SELECT items.id, items.name, items.value\r\n"
+						+ "FROM order_items\r\n"
+						+ "INNER JOIN items ON \r\n"
+						+ "	order_items.item_id=items.id\r\n"
+						+ "    AND order_id = "+ id +";"
+						);) {
+			ArrayList<Item> items = new ArrayList<>();
+			while (resultSet.next()) {
+				items.add(modelFromResultSetItem(resultSet));
+			}
+			return items;
+		} catch (SQLException e) {
+			LOGGER.debug(e);
+			LOGGER.error(e.getMessage());
+		}
+		return new ArrayList<>();
+	}
+	
 }

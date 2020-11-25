@@ -4,9 +4,12 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.tools.picocli.CommandLine;
 
 import com.qa.ims.persistence.dao.CustomerDAO;
 import com.qa.ims.persistence.domain.Customer;
+import com.qa.ims.persistence.domain.Order;
+import com.qa.ims.utils.CommandLineTable;
 import com.qa.ims.utils.Utils;
 
 /**
@@ -31,10 +34,13 @@ public class CustomerController implements CrudController<Customer> {
 	 */
 	@Override
 	public List<Customer> readAll() {
+		CommandLineTable clt = new CommandLineTable();
+		clt.setHeaders("ID", "FIRST_NAME", "SURNAME");
 		List<Customer> customers = customerDAO.readAll();
 		for (Customer customer : customers) {
-			LOGGER.info(customer.toString());
+			customer.toRow(clt);
 		}
+		clt.print();
 		return customers;
 	}
 
@@ -57,11 +63,24 @@ public class CustomerController implements CrudController<Customer> {
 	 */
 	@Override
 	public Customer update() {
-		LOGGER.info("Please enter the id of the customer you would like to update");
-		Long id = utils.getLong();
-		LOGGER.info("Please enter a first name");
+		Long id;
+		boolean valid = false;
+		
+		do {
+			LOGGER.info("Please enter the id of the customer you would like to update");
+			id = utils.getLong();
+			
+			Customer checkCustomer = customerDAO.readCustomer(id);
+			if(checkCustomer != null){
+				valid = true;
+			}else {
+				LOGGER.info("This customer id does not exist!");
+			}
+		}while(!valid);
+		
+		LOGGER.info("Please enter new first name");
 		String firstName = utils.getString();
-		LOGGER.info("Please enter a surname");
+		LOGGER.info("Please enter new surname");
 		String surname = utils.getString();
 		Customer customer = customerDAO.update(new Customer(id, firstName, surname));
 		LOGGER.info("Customer Updated");

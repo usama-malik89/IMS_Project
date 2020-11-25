@@ -7,6 +7,8 @@ import org.apache.logging.log4j.Logger;
 
 import com.qa.ims.persistence.dao.ItemDAO;
 import com.qa.ims.persistence.domain.Item;
+import com.qa.ims.persistence.domain.Order;
+import com.qa.ims.utils.CommandLineTable;
 import com.qa.ims.utils.Utils;
 
 /**
@@ -31,10 +33,13 @@ public class ItemController implements CrudController<Item> {
 	 */
 	@Override
 	public List<Item> readAll() {
+		CommandLineTable clt = new CommandLineTable();
+		clt.setHeaders("ID", "NAME", "VALUE");
 		List<Item> items = itemDAO.readAll();
 		for (Item item : items) {
-			LOGGER.info(item.toString());
+			item.toRow(clt);
 		}
+		clt.print();
 		return items;
 	}
 
@@ -57,8 +62,20 @@ public class ItemController implements CrudController<Item> {
 	 */
 	@Override
 	public Item update() {
-		LOGGER.info("Please enter the id of the item you would like to update");
-		Long id = utils.getLong();
+		
+		boolean valid = false;
+		Long id;
+		do {
+			LOGGER.info("Please enter the id of the item you would like to update");
+			id = utils.getLong();
+			Item checkItem = itemDAO.readItem(id);
+			if(checkItem != null){
+				valid = true;
+			}else {
+				LOGGER.info("This order id does not exist!");
+			}
+		}while(!valid);
+		
 		LOGGER.info("Please enter a name");
 		String name = utils.getString();
 		LOGGER.info("Please enter a value");

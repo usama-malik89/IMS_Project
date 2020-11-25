@@ -1,5 +1,7 @@
 package com.qa.ims.persistence.domain;
 
+import com.qa.ims.utils.CommandLineTable;
+
 public class Customer {
 
 	private Long id;
@@ -44,6 +46,11 @@ public class Customer {
 	@Override
 	public String toString() {
 		return "id:" + id + " first name:" + firstName + " surname:" + surname;
+	}
+	
+	public CommandLineTable toRow(CommandLineTable clt) {
+		clt.addRow(Long.toString(id), firstName, surname);
+		return clt;
 	}
 
 	@Override

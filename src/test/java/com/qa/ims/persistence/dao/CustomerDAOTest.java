@@ -14,7 +14,7 @@ import com.qa.ims.utils.DBUtils;
 
 public class CustomerDAOTest {
 
-	private final CustomerDAO DAO = new CustomerDAO();
+	private final CustomerDAO dao = new CustomerDAO();
 
 	@BeforeClass
 	public static void init() {
@@ -28,37 +28,38 @@ public class CustomerDAOTest {
 
 	@Test
 	public void testCreate() {
-		final Customer created = new Customer(2L, "chris", "perrins");
-		assertEquals(created, DAO.create(created));
+		final Customer created = new Customer(3L, "chris", "perrins");
+		assertEquals(created, dao.create(created));
 	}
 
 	@Test
 	public void testReadAll() {
 		List<Customer> expected = new ArrayList<>();
 		expected.add(new Customer(1L, "jordan", "harrison"));
-		assertEquals(expected, DAO.readAll());
+		expected.add(new Customer(2L, "usama", "malik"));
+		assertEquals(expected, dao.readAll());
 	}
 
 	@Test
 	public void testReadLatest() {
-		assertEquals(new Customer(1L, "jordan", "harrison"), DAO.readLatest());
+		assertEquals(new Customer(2L, "usama", "malik"), dao.readLatest());
 	}
 
 	@Test
 	public void testRead() {
 		final long ID = 1L;
-		assertEquals(new Customer(ID, "jordan", "harrison"), DAO.readCustomer(ID));
+		assertEquals(new Customer(ID, "jordan", "harrison"), dao.readCustomer(ID));
 	}
 
 	@Test
 	public void testUpdate() {
 		final Customer updated = new Customer(1L, "chris", "perrins");
-		assertEquals(updated, DAO.update(updated));
+		assertEquals(updated, dao.update(updated));
 
 	}
 
 	@Test
 	public void testDelete() {
-		assertEquals(1, DAO.delete(1));
+		assertEquals(1, dao.delete(1));
 	}
 }

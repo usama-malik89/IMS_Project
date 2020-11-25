@@ -54,7 +54,6 @@ public class ItemDAOTest {
 	public void testUpdate() {
 		final Item updated = new Item(1L, "orange", 1.456);
 		assertEquals(updated, DAO.update(updated));
-
 	}
 
 	@Test

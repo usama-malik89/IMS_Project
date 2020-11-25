@@ -61,4 +61,10 @@ public class OrderDAOFailTest {
 	public void testDelete() {
 		assertEquals(0, DAO.delete(1));
 	}
+	
+	@Test
+	public void testCreateOrderItems() {
+		final Order created = new Order(1L, 1L);
+		assertEquals(null, DAO.createOrderItems(created, 1L));
+	}
 }

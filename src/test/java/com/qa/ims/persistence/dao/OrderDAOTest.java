@@ -32,39 +32,38 @@ public class OrderDAOTest {
 		assertEquals(created, DAO.create(created));
 	}
 
-//	@Test
-//	public void testReadAll() {
-//		List<Order> expected = new ArrayList<>();
-//		expected.add(new Order(1L, 1L));
-//		assertEquals(expected, DAO.readAll());
-//	}
-//
-//	@Test
-//	public void testReadLatest() {
-//		assertEquals(new Order(1L, 1L), DAO.readLatest());
-//	}
-//
-//	@Test
-//	public void testRead() {
-//		final long ID = 1L;
-//		assertEquals(new Order(ID, 1L), DAO.readOrder(ID));
-//	}
-//
-//	@Test
-//	public void testUpdate() {
-//		final Order updated = new Order(1L, 2L);
-//		assertEquals(updated, DAO.update(updated));
-//
-//	}
-//
-//	@Test
-//	public void testDelete() {
-//		assertEquals(1, DAO.delete(1));
-//	}
-//	
-//	@Test
-//	public void testCreateOrderItems() {
-//		final Order created = new Order(2L, 1L);
-//		assertEquals(created, DAO.createOrderItems(created, 1L));
-//	}
+	@Test
+	public void testReadAll() {
+		List<Order> expected = new ArrayList<>();
+		expected.add(new Order(1L, 1L));
+		assertEquals(expected, DAO.readAll());
+	}
+
+	@Test
+	public void testReadLatest() {
+		assertEquals(new Order(1L, 1L), DAO.readLatest());
+	}
+
+	@Test
+	public void testRead() {
+		final long ID = 1L;
+		assertEquals(new Order(ID, 1L), DAO.readOrder(ID));
+	}
+
+	@Test
+	public void testUpdate() {
+		final Order updated = new Order(1L, 2L);
+		assertEquals(updated, DAO.update(updated));
+	}
+
+	@Test
+	public void testDelete() {
+		assertEquals(1, DAO.delete(1));
+	}
+	
+	@Test
+	public void testCreateOrderItems() {
+		final Order created = new Order(1L, 1L);
+		assertEquals(created, DAO.createOrderItems(created, 1L));
+	}
 }

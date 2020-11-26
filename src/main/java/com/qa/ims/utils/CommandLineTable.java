@@ -73,15 +73,4 @@ public class CommandLineTable {
         }
         System.out.println();
     }
-
-//    public static void main(String[] args) {
-//        //test code
-//        CommandLineTable st = new CommandLineTable();
-//        
-//        st.setHeaders("one", "two");//optional - if not used then there will be no header and horizontal lines
-//        st.addRow("super", "broccoli");
-//        st.addRow("assumption", "announcement");
-//        st.addRow("logic", "pleasant");
-//        st.print();
-//    }
 }

@@ -65,6 +65,6 @@ public class OrderDAOFailTest {
 	@Test
 	public void testCreateOrderItems() {
 		final Order created = new Order(1L, 1L);
-		assertEquals(null, DAO.createOrderItems(created, 1L));
+		assertEquals(null, DAO.createOrderItems(created, 1L, 1));
 	}
 }

@@ -49,6 +49,19 @@ public class Utils {
 		return doubleInput;
 	}
 	
+	public Integer getInt() {
+		Integer intInput = null;
+		do {
+			String input = getString();
+			try {
+				intInput = Integer.parseInt(input);
+			} catch (NumberFormatException nfe) {
+				LOGGER.info("Error - Please enter a number");
+			}
+		} while (intInput == null);
+		return intInput;
+	}
+	
 	public Long getOrderItemAction() {
 		Long longInput = null;
 		do {

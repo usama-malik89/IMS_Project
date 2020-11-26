@@ -11,6 +11,7 @@ public class Order {
 	private Long id;
 	private Long customer_id;
 	private ArrayList<Item> items;
+	private double orderCost;
 
 
 	public Order(Long customer_id) {
@@ -51,16 +52,33 @@ public class Order {
 	public void setItems(ArrayList<Item> items){
 		this.items = items;
 	}
+	
+	public double calcCost(){
+		double total = 0;
+		for(Item i : items) {
+			total += i.getValue();
+		}
+		this.orderCost = total;
+		return total;
+	}
+	
+	public void setOrderCost(double cost) {
+		this.orderCost = cost;
+	}
+	
+	public double getOrderCost() {
+		return orderCost;
+	}
 
 	@Override
 	public String toString() {
-		String result = "order_id:" + id + " customer_id:" + customer_id;
+		String result = "order_id:" + id + " customer_id:" + customer_id + " orderCost:" + calcCost();
 		return result;
 	}
 	
 	public CommandLineTable toRow(CommandLineTable clt) {
 		for(Item item : items) {
-			clt.addRow(Long.toString(item.getId()), item.getName(), Double.toString(item.getValue()));
+			clt.addRow(Long.toString(item.getId()), item.getName(), Integer.toString(item.getQuantity()), Double.toString(item.getValue()));
 		}
 		return clt;
 	}

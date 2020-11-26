@@ -49,7 +49,7 @@ public class ItemControllerTest {
 	@Test
 	public void testReadAll() {
 		List<Item> items = new ArrayList<>();
-		items.add(new Item(1L, "banana", 1.2));
+		items.add(new Item(1L, "banana", 1.2, null));
 
 		Mockito.when(dao.readAll()).thenReturn(items);
 
@@ -60,7 +60,7 @@ public class ItemControllerTest {
 
 	@Test
 	public void testUpdate() {
-		Item updated = new Item(1L, "banana", 1.2);
+		Item updated = new Item(1L, "banana", 1.2, null);
 
 		Mockito.when(this.utils.getLong()).thenReturn(1L);
 		Mockito.when(this.utils.getString()).thenReturn(updated.getName());

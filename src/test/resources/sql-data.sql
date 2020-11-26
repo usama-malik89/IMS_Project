@@ -5,4 +5,4 @@ INSERT INTO `test_ims`.`items` (`name`, `value`) VALUES ('apple', '1.23');
 
 INSERT INTO `test_ims`.`orders` (`customer_id`) VALUES ('1');
 
-INSERT INTO `test_ims`.`order_items` (`order_id`, `item_id`) VALUES ('1','1');
+INSERT INTO `test_ims`.`order_items` (`order_id`, `item_id`, `quantity`) VALUES ('1','1','1');

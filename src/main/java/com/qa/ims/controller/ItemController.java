@@ -80,7 +80,7 @@ public class ItemController implements CrudController<Item> {
 		String name = utils.getString();
 		LOGGER.info("Please enter a value");
 		double value = utils.getDouble();
-		Item item = itemDAO.update(new Item(id, name, value));
+		Item item = itemDAO.update(new Item(id, name, value, null));
 		LOGGER.info("Item Updated");
 		return item;
 	}

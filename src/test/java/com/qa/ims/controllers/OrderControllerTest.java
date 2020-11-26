@@ -61,15 +61,22 @@ public class OrderControllerTest {
 
 	@Test
 	public void testUpdate() {
-		Order updated = new Order(1L, 1L);
+		Long id = 1L;
+		Long c_id = 1L;
+		Order updated = new Order(id, c_id);
 
 		Mockito.when(this.utils.getLong()).thenReturn(updated.getCustomerId());
-		Mockito.when(this.dao.update(updated)).thenReturn(updated);
+		Mockito.when(this.utils.getString()).thenReturn("add", "remove", "RETURN");
+		Mockito.when(this.utils.getOrderItemAction()).thenReturn(1L);
+		Mockito.when(this.utils.getInt()).thenReturn(1);
+		Mockito.when(this.dao.createOrderItems(updated, 1L, 1)).thenReturn(updated);
+		Mockito.when(this.dao.removeOrderItems(updated, 1L)).thenReturn(updated);
+		
 		Mockito.when(this.dao.readOrder(1L)).thenReturn(updated);
 		assertEquals(updated, this.controller.update());
 
-		Mockito.verify(this.utils, Mockito.times(2)).getLong();
-		Mockito.verify(this.dao, Mockito.times(1)).update(updated);
+		Mockito.verify(this.utils, Mockito.times(1)).getLong();
+		Mockito.verify(this.dao, Mockito.times(0)).update(updated);
 	}
 
 	@Test

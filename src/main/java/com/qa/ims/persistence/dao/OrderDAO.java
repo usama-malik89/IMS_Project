@@ -31,7 +31,8 @@ public class OrderDAO implements Dao<Order> {
 		Long id = resultSet.getLong("id");
 		String name = resultSet.getString("name");
 		Double value = resultSet.getDouble("value");
-		return new Item(id, name, value);
+		Integer quantity = resultSet.getInt("quantity");
+		return new Item(id, name, value, quantity);
 	}
 
 	/**
@@ -145,11 +146,26 @@ public class OrderDAO implements Dao<Order> {
 		return 0;
 	}
 	
-	public Order createOrderItems(Order order, long itemID) {
+	public Order createOrderItems(Order order, long itemID, int quantity) {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				Statement statement = connection.createStatement();) {
-			statement.executeUpdate("INSERT INTO order_items(order_id, item_id) values('" + order.getId() +"','" + itemID +"')");
+			statement.executeUpdate("INSERT INTO order_items(order_id, item_id, quantity) values('" + order.getId() +"','" + itemID +"','" + quantity +"');");
 			return readLatest();
+		} catch (SQLIntegrityConstraintViolationException e) {
+			LOGGER.debug(e);
+			LOGGER.error("This customer ID or item ID does not exist!");
+		} catch (Exception e) {
+			LOGGER.debug(e);
+			LOGGER.error(e.getMessage());
+		}
+		return null;
+	}
+	
+	public Order removeOrderItems(Order order, long itemID) {
+		try (Connection connection = DBUtils.getInstance().getConnection();
+				Statement statement = connection.createStatement();) {
+			statement.executeUpdate("DELETE FROM order_items WHERE order_items.order_id = " + order.getId() + " AND order_items.item_id = " + itemID + ";");
+			return order;
 		} catch (SQLIntegrityConstraintViolationException e) {
 			LOGGER.debug(e);
 			LOGGER.error("This customer ID or item ID does not exist!");
@@ -164,7 +180,7 @@ public class OrderDAO implements Dao<Order> {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery(""
-						+ "SELECT items.id, items.name, items.value\r\n"
+						+ "SELECT items.id, items.name, items.value, order_items.quantity\r\n"
 						+ "FROM order_items\r\n"
 						+ "INNER JOIN items ON \r\n"
 						+ "	order_items.item_id=items.id\r\n"

@@ -13,72 +13,54 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+The Software you will need to install
 
 ```
-Give examples
+IDE - Eclipse (https://www.eclipse.org/downloads/)
+JAVA - Java SE Development Kit (https://www.oracle.com/uk/java/technologies/javase/javase-jdk8-downloads.html)
+Database - MySQL (https://dev.mysql.com/downloads/mysql/5.7.html)
+Maven - Apache Maven (https://maven.apache.org/download.cgi?Preferred=ftp://ftp.osuosl.org/pub/apache/)
 ```
 
 ### Installing
 
 A step by step series of examples that tell you how to get a development env running
 
-Say what the step will be
 
+1. After setting up all software, you need to create a database on the local MySQL server
+  - Open MySQL Workbench
+  - Select the local database instance and enter your credentials
+  - In the query section make a new database called 'ims' using this query:
 ```
-Give the example
+CREATE DATABASE `ims`;
 ```
-
-And repeat
-
+2. To run the IMS system simply navigate to the directory where the pom.xml file is located and run the command:
 ```
-until finished
+mvn clean package
 ```
-
-End with an example of getting some data out of the system or using it for a little demo
+This will create a directory 'target' which will contain a jar file, run the jar file by navigating to target file and running the following command:
+```
+java -jar ims-jar-with-dependencies.jar
+```
 
 ## Running the tests
 
-Explain how to run the automated tests for this system. Break down into which tests and what they do
-
-### Unit Tests
-
-Explain what these tests test, why and how to run them
-
-```
-Give an example
-```
-
-### Integration Tests
-Explain what these tests test, why and how to run them
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
+Tests automatically run when "mvn clean package" in run. However more detailed output tests can be run using eclipse:
+1. In eclipse open the folder containing the source code as a Maven project
+2. Right click on the project and click Coverage as -> JUnit Test, this will give a more broken down test result
 
 ## Built With
 
 * [Maven](https://maven.apache.org/) - Dependency Management
 
-## Versioning
+## Version
 
-We use [SemVer](http://semver.org/) for versioning.
+IMS 0.0.1
 
 ## Authors
 
 * **Chris Perrins** - *Initial work* - [christophperrins](https://github.com/christophperrins)
+* **Usama Malik** - *Built onto Chris Perrins work* [usama-malik89](https://github.com/usama-malik89)
 
 ## License
 
@@ -88,6 +70,5 @@ This project is licensed under the MIT license - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+* **Chris Perrins** who created the initial project structure
+* **Logic Big** - [logicbig.com](https://www.logicbig.com/how-to/code-snippets/jcode-java-cmd-command-line-table.html) who's command line table creator class I used
